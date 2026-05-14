@@ -167,28 +167,4 @@ status RemoveList(LISTS& Lists, char ListName[]);
  */
 int LocateList(LISTS Lists, char ListName[]);
 
-/**
- * @brief 
- * @param L 
- * @return ElemType 
- */
-ElemType MaxSubArray(SqList L);
-
-/**
- * @brief 
- * @param L 
- * @param k 
- * @return int 
- */
-int SubArrayNum(SqList L, int k);
-
-/**
- * @brief 对线性表进行排序
- * @param L 待排序的线性表（按值传递，不影响原表？视实际情况）
- * @return status 操作结果：
- *         - OK    排序成功
- *         - ERROR 排序失败（如L为空或内存不足）
- */
-status SortList(SqList L);
-
 #endif

@@ -283,7 +283,7 @@ status LoadList(LinkList &L, char *FileName)
     return INFEASIBLE;
 }
 
-status reverseList(LinkList &L)
+status ReverseList(LinkList &L)
 {
     if (L)
     {
@@ -322,7 +322,7 @@ status RemoveNthFromEnd(LinkList &L, int n, ElemType &e)
     return INFEASIBLE;
 }
 
-status sortList(LinkList &L)
+status SortList(LinkList &L)
 {
     if (L)
     {
