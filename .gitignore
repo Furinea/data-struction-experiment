@@ -1,17 +1,21 @@
+*.zip
+*.log
+*.aux
+*.out
+*.pdf
+*.synctex.gz
+*.toc
+texput.log
+images/
+exp*.txt
+数据结构实验报告.*
+计算机2512_*.zip
+CS2512_*.zip
 *.exe
-
-# 忽略 Obsidian 的工作区状态文件，避免在不同设备间产生冲突
-.obsidian/workspace.json
-.obsidian/workspace-mobile.json
-
-# 忽略 Obsidian 的缓存和临时文件
-.obsidian/cache/
-.trash/
-
-# 忽略操作系统产生的文件 (.DS_Store是Mac，Thumbs.db是Windows)
-.DS_Store
-Thumbs.db
-
-# 忽略可能产生的临时文件
-*.tmp
-*.swp
+*.bib
+.bst
+*.bst
+*.cfg
+*.cls
+*.eps
+*.ttf

@@ -27,9 +27,9 @@ typedef struct          //线性表的集合类型定义
         SqList L;
     } elem[10];
     int length;
-}LISTS;
-//LISTS Lists;      //线性表集合的定义Lists
+}LISTS;     //线性表集合的定义Lists
 
+      
 /**
  * @brief 初始化线性表
  * @param L 顺序表引用（未初始化的）
@@ -155,7 +155,7 @@ status AddList(LISTS& Lists, char ListName[]);
  * @brief 删除指定表
  * @param Lists 线性表集合
  * @param ListName 删除表的名字
- * @return status 如果找到该线性表，删除并返回OK；否则，返回ERROR·
+ * @return status 如果找到该线性表，删除并返回OK；否则，返回ERROR
  */
 status RemoveList(LISTS& Lists, char ListName[]);
 
@@ -166,5 +166,29 @@ status RemoveList(LISTS& Lists, char ListName[]);
  * @return int 如果找到该线性表，返回其序号（1~len）；否则，返回ERROR(0)
  */
 int LocateList(LISTS Lists, char ListName[]);
+
+//额外功能
+
+/**
+ * @brief 计算最大连续子数组和
+ * @param L 线性表
+ * @return ElemType 返回和
+ */
+ElemType MaxSubArray(SqList L);
+
+/**
+ * @brief 计算和为K的子数组个数
+ * @param L 线性表
+ * @param k 目标和
+ * @return int 返回个数
+ */
+int SubArrayNum(SqList L, int k);
+
+/**
+ * @brief 线性表排序
+ * @param L 待排序线性表
+ * @return status 如果线性表不存在，返回INFEASIBLE；如果线性表为空，返回ERROR
+ */
+status SortList(SqList L);
 
 #endif

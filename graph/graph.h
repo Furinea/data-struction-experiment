@@ -37,26 +37,27 @@ typedef struct          //邻接表类型定义
     AdjList vertices;           //头结点数组
     int vexnum, arcnum;         //顶点数，边数
     GraphKind kind;             //图类型
+    char name[20];              //图的名字（用于多图管理）
 } ALGraph;
 
 /**
  * @brief 创建图，根据数组V和VR
  * @param G 图的引用
- * @param V 顶点数组
- * @param VR 
+ * @param V 顶点数组，头结点数组
+ * @param VR 关系对序列VR
  * @return status 构造成功，返回OK；如果V和VR不正确或者关键字重复，返回ERROR
  */
-status CreateCraph(ALGraph &G, VertexType V[], KeyType VR[][2]);
+status CreateGraph(ALGraph &G, VertexType V[], KeyType VR[][2]);
 
 /**
- * @brief 销毁图
+ * @brief 销毁图，清空边集，并讲顶点数和边数置0
  * @param G 图的引用
  * @return status 始终返回OK； 
  */
 status DestroyGraph(ALGraph &G);
 
 /**
- * @brief 查找顶点
+ * @brief 查找顶点 
  * @param G 图（只读）
  * @param u 待查找的顶点
  * @return int 返回编号；没找到，返回-1
@@ -98,10 +99,10 @@ int NextAdjVex(ALGraph G, KeyType v, KeyType w);
 status InsertVex(ALGraph &G, VertexType v);
 
 /**
- * @brief 删除顶点，及其关联的边
+ * @brief 删除顶点，及其关联的边，注意更新
  * @param G 图的引用
  * @param v 待删除顶点
- * @return status 成功删除，返回OK；否则，返回ERROR
+ * @return status 成功删除，返回OK；如果顶点不存在或者边数为0（顶点存在但没有边），返回ERROR
  */
 status DeleteVex(ALGraph &G, KeyType v);
 
@@ -110,7 +111,7 @@ status DeleteVex(ALGraph &G, KeyType v);
  * @param G 图的引用
  * @param v 弧尾
  * @param w 弧头
- * @return status 成功，返回OK；否则，返回ERROR
+ * @return status 成功，返回OK；如果顶点不存在或边已经存在，返回ERROR
  */
 status InsertArc(ALGraph &G, KeyType v, KeyType w);
 
@@ -123,10 +124,19 @@ status InsertArc(ALGraph &G, KeyType v, KeyType w);
  */
 status DeleteArc(ALGraph &G, KeyType v, KeyType w);
 
-/*
-*输出顶点数据
+
+
 void visit(VertexType v);
-*/
+
+
+/**
+ * @brief 
+ * @param G 图
+ * @param v 从顶点编号v开始DFS， DFSTraverse的辅助函数
+ * @param visited 标记数组
+ * @param visit 访问函数
+ */
+void DFS(ALGraph G, int v, int visited[], void ( *visit)(VertexType ));
 
 /**
  * @brief 深度优先遍历
@@ -159,5 +169,28 @@ status SaveGraph(ALGraph G, char FileName[]);
  * @return status 成功，返回OK；否则，返回ERROR
  */
 status LoadGraph(ALGraph &G, char FileName[]);
+
+//额外功能
+
+/**
+ * @brief 最短路算法，用于实现附加功能一、二
+ * @param G 图
+ * @param u 顶点
+ * @param dist 最短路数组；路径不存在数组值为-1
+ */
+void Dijkstra(ALGraph G, int u,int dist[]);
+
+/**
+ * @brief 求图G的连通分量个数
+ * @param G 图
+ * @return int 返回个数
+ */
+int ConnectedComponentsNums(ALGraph G);
+
+/**
+ * @brief 输出函数
+ * @param G 图
+ */
+void PrintGraph(ALGraph G);
 
 #endif

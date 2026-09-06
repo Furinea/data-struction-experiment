@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<algorithm>
 #include<queue>
 #include<stack>
 #include "binary_tree.h"
@@ -17,47 +18,60 @@ int KeyExistInDef(TElemType definition[], int index, KeyType key)
     return 0;
 }
 
-status CreateBiTree(BiTree &T, TElemType definition[])
+//辅助递归函数
+static status CreateBiTreeHelper(BiTree &T, TElemType definition[], int &index)
 {
-    static int index = 0;       //注意一定要用静态变量或者全局变量
-    if (definition[index].key == 0)     //递归终止条件1
+    if (definition[index].key == 0)     
     {
         T = NULL;
         index++;
         return OK;
     }
-    if (definition[index].key == -1)    //递归终止条件2
+    if (definition[index].key == -1)  
     {
-        return OK;
+        return OK;  
     }
-    T = (BiTree)malloc(sizeof(BiTNode));    //创建新结点
-    if (!T)
+    T = (BiTree)malloc(sizeof(BiTNode));
+    if (!T) return ERROR;
+    
+    if (KeyExistInDef(definition, index, definition[index].key))
     {
-        return ERROR;
-    }
-    if (KeyExistInDef(definition, index, definition[index].key))    //检测关键字是否重复
-    {
+        free(T);
         return ERROR;
     }
     T->data = definition[index];
     index++;
-    if (CreateBiTree(T->lchild, definition) == ERROR)   //递归构造左子树
+    
+    if (CreateBiTreeHelper(T->lchild, definition, index) == ERROR)
     {
-        return ERROR;   
+        free(T);
+        return ERROR;
     }
-    if (CreateBiTree(T->rchild, definition) == ERROR)   //递归构造右子树
+    if (CreateBiTreeHelper(T->rchild, definition, index) == ERROR)
     {
+        free(T);
         return ERROR;
     }
     return OK;
 }
 
+status CreateBiTree(BiTree &T, TElemType definition[])
+{
+    int index = 0;   //局部变量，每次调用都从0开始（为完成多树）
+    return CreateBiTreeHelper(T, definition, index);
+}
+
+status DestroyBiTree(BiTree &T)
+{
+    if (T == NULL) return INFEASIBLE; 
+    ClearBiTree(T);  
+    T = NULL;
+    return OK;
+}
+
 status ClearBiTree(BiTree &T)
 {
-    if (!T)     //递归终止条件
-    {
-        return OK;
-    }
+    if (T == NULL) return INFEASIBLE;
     ClearBiTree(T->lchild);
     ClearBiTree(T->rchild);
     free(T);
@@ -65,9 +79,9 @@ status ClearBiTree(BiTree &T)
     return OK;
 }
 
-status BiTreeEmpty(BiTree T)        //哪里用到？？
+status BiTreeEmpty(BiTree T)        
 {
-    if (T && T->data.key == -1)
+    if (T == NULL)
     {
         return TRUE;
     }
@@ -309,11 +323,12 @@ status DeleteNode(BiTree &T, KeyType e) //删除树根？
     return OK;
 }
 
-/*
-void visit(BiTree node) {
-    printf("%d %s ", node->data.key, node.data.other);
+
+void visit(BiTree node) 
+{
+    printf("%d %s ", node->data.key, node->data.others);
 }
-*/
+
 
 status PreOrderTraverse(BiTree T, void (*visit)(BiTree))    //非递归，用栈模拟
 {
@@ -375,7 +390,7 @@ status LevelOrderTraverse(BiTree T, void (*visit)(BiTree))
     while (!q.empty())
     {
         BiTree t = q.front();
-        visit(T);
+        visit(t);
         if (t->lchild)
         {
             q.push(t->lchild);
@@ -458,5 +473,49 @@ status LoadBiTree(BiTree &T, char FileName[])
     } while (pos[i++]);
     fclose(fp);
     CreateLoadBiTree(T, pos, definition);
+    return OK;
+}
+
+int MaxPathSum(BiTree T)
+{
+    if (!T)
+    {
+        return 0;
+    }
+    int leftsum = MaxPathSum(T->lchild);
+    int rightsum = MaxPathSum(T->rchild);
+    return  std::max(leftsum, rightsum) + T->data.key;
+}
+
+BiTree LowestCommonAncestor(BiTree T, KeyType e1, KeyType e2)   //递归法一般只用与二叉树
+{
+    if (!T)
+    {
+        return NULL;
+    }
+    if (T->data.key == e1 || T->data.key == e2)     //递归出口
+    {
+        return T;
+    }
+    BiTree left = LowestCommonAncestor(T->lchild, e1, e2);      
+    BiTree right = LowestCommonAncestor(T->rchild, e1, e2);     
+    if (left && right)      //回溯时判断，保证是最近
+    {
+        return T;
+    }
+    return left ? left : right;
+}
+
+status InvertTree(BiTree &T)
+{
+    if (!T)
+    {
+        return OK;
+    }
+    BiTree temp = T->lchild;
+    T->lchild = T->rchild;
+    T->rchild = temp;
+    InvertTree(T->lchild);
+    InvertTree(T->rchild);
     return OK;
 }

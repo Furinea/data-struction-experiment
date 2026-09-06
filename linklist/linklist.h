@@ -17,6 +17,12 @@ typedef struct LNode //单链表（链式结构）结点的定义
     struct LNode *next;
 }LNode, *LinkList;
 
+typedef struct 
+{
+    char name[20];
+    LinkList list;
+} ListTable;        //线性表集合
+
 /**
  * @brief 创建空链表
  * @param L 链表的引用
@@ -127,6 +133,8 @@ status SaveList(LinkList L, char *FileName);
  * @return status 成功加载返回OK；L已存在或文件错误返回INFEASIBLE
  */
 status LoadList(LinkList &L, char *FileName);
+
+//额外功能
 
 /**
  * @brief 链表逆置

@@ -44,6 +44,22 @@ typedef struct         //二叉树集合定义
 int KeyExistInDef(TElemType definition[], int index, KeyType key);
 
 /**
+ * @brief 销毁二叉树，释放所有结点内存，并将根指针置为 NULL，树结构不再可用
+ * @param T 二叉树的引用（待销毁的树）
+ * @return status 销毁成功返回 OK；若 T 本身为 NULL（树不存在）返回 INFEASIBLE
+ * @note 销毁后无法再对 T 进行任何操作，除非重新创建
+ */
+status DestroyBiTree(BiTree &T);
+
+/**
+ * @brief 清空二叉树，释放所有结点内存，使树变为空树（根结点为 NULL），但保留树的存储结构（可重新插入）
+ * @param T 二叉树的引用
+ * @return status 清空成功返回 OK；若树不存在（T 为 NULL）返回 INFEASIBLE
+ * @note 与 DestroyBiTree 的区别：清空后树为空，但仍可继续使用（如插入新结点）
+ */
+status ClearBiTree(BiTree &T);
+
+/**
  * @brief 根据先序序列创建二叉树
  * @param T 二叉树的引用，创建后指向根结点
  * @param definition 以先序序列给出的结点数组（关键字为0，表示空结点；为-1，表示结束）
@@ -51,13 +67,6 @@ int KeyExistInDef(TElemType definition[], int index, KeyType key);
  * @note 调用KeyExistInDef检测序列中是否存在重复关键字
  */
 status CreateBiTree(BiTree &T, TElemType definition[]);
-
-/**
- * @brief 销毁二叉树，将二叉树设置为空，删除所有结点，释放空间
- * @param T 二叉树的引用
- * @return status 始终返回OK
- */
-status ClearBiTree(BiTree &T);
 
 /**
  * @brief 判断二叉树是否为空
@@ -153,9 +162,9 @@ int DegreeNode(BiTree T);
  */
 status DeleteNode(BiTree &T, KeyType e);
 
-/*
+
 void visit(BiTree node);
-*/
+
 
 /**
  * @brief 先序遍历二叉树并打印结点数据
@@ -223,5 +232,32 @@ void CreateLoadBiTree(BiTree &T, int pos[], TElemType definition[]);
  * @note 读取带空枝的先序序列，内部调用CreateBiTree
  */
 status LoadBiTree(BiTree &T, char FileName[]);
+
+//额外功能
+
+/**
+ * @brief 求最大路径和
+ * @param T 二叉树（只读）
+ * @return int 返回最大路径和；若T不存在，返回0
+ */
+int MaxPathSum(BiTree T);
+
+/**
+ * @brief 最近公共祖先
+ * @param T 二叉树
+ * @param e1 结点
+ * @param e2 结点
+ * @return BiTree 返回最近公共祖先；若不存在，返回NULL
+ */
+BiTree LowestCommonAncestor(BiTree T, KeyType e1, KeyType e2);
+
+/**
+ * @brief 翻转二叉树，使所有结点左右互换
+ * @param T 二叉树
+ * @return status 始终返回OK
+ */
+status InvertTree(BiTree& T);
+
+
 
 #endif
